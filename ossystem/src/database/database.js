@@ -51,7 +51,7 @@ export async function resetDatabase() {
   const database = await getDatabase();
 
   try {
-    console.log("Iniciando reset do banco de dados...");
+    // console.log("Iniciando reset do banco de dados...");
 
     // 1. Apagar todas as tabelas (DROP TABLE)
     await database.execAsync(`
@@ -59,15 +59,15 @@ export async function resetDatabase() {
       DROP TABLE IF EXISTS usuarios;
     `);
 
-    console.log("Tabelas apagadas com sucesso.");
+    // console.log("Tabelas apagadas com sucesso.");
 
     // 2. Recriar as tabelas chamando a função initDatabase
     await initDatabase();
 
-    console.log("Banco de dados resetado e recriado com sucesso!");
+    // console.log("Banco de dados resetado e recriado com sucesso!");
     return true;
   } catch (error) {
-    console.error("Erro durante o reset do banco de dados:", error);
+    // console.error("Erro durante o reset do banco de dados:", error);
     throw error;
   }
 }
