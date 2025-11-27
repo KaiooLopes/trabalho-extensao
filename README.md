@@ -1,5 +1,5 @@
 # Trabalho-Extensão – OSSystem
-Projeto desenvolvido para o trabalho de extensão da disciplina de Programação para Dispositivos Móveis (Android), do curso de Análise e Desenvolvimento de Sistemas. O app foi criado utilizando **React Native com Expo** e funciona tanto no Android quanto no iOS.
+Projeto desenvolvido para o trabalho de extensão da disciplina de Programação para Dispositivos Móveis (Android), do curso de Análise e Desenvolvimento de Sistemas. O app foi criado utilizando **React Native com Expo**.
 
 ## Como executar o projeto no Expo Go
 
