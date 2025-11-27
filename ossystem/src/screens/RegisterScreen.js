@@ -8,9 +8,11 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    Image,
 } from "react-native";
 import { registerUser } from "../database/userService";
 import { styles } from "../styles/RegisterStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterScreen({ navigation }) {
     const [nome, setNome] = useState("");
@@ -22,6 +24,13 @@ export default function RegisterScreen({ navigation }) {
     async function handleRegister() {
         if (!nome || !email || !senha || !confirmarSenha) {
             Alert.alert("Atenção", "Preencha todos os campos!");
+            return;
+        }
+
+        // Validação de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Alert.alert("Erro", "Por favor, insira um email válido!");
             return;
         }
 
@@ -54,11 +63,15 @@ export default function RegisterScreen({ navigation }) {
             style={styles.container}
         >
             <ScrollView contentContainerStyle={styles.scrollView}>
-                <View style={styles.content}>
+                <SafeAreaView style={styles.container}>
                     {/* Header */}
                     <View style={styles.header}>
                         <View style={styles.iconContainer}>
-                            <Text style={styles.icon}>✨</Text>
+                            <Image
+                                source={require('../../assets/icon.png')}
+                                style={{ width: 180 }}
+                                resizeMode="contain"
+                            />
                         </View>
                         <Text style={styles.title}>Criar Conta</Text>
                         <Text style={styles.subtitle}>Preencha seus dados abaixo</Text>
@@ -99,6 +112,7 @@ export default function RegisterScreen({ navigation }) {
                                 secureTextEntry
                                 value={senha}
                                 onChangeText={setSenha}
+                                autoCapitalize="none"
                             />
                             <Text style={styles.hint}>Mínimo de 6 caracteres</Text>
                         </View>
@@ -112,6 +126,7 @@ export default function RegisterScreen({ navigation }) {
                                 secureTextEntry
                                 value={confirmarSenha}
                                 onChangeText={setConfirmarSenha}
+                                autoCapitalize="none"
                             />
                         </View>
 
@@ -138,7 +153,7 @@ export default function RegisterScreen({ navigation }) {
                             <Text style={styles.secondaryButtonText}>Voltar para Login</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </SafeAreaView>
             </ScrollView>
         </KeyboardAvoidingView>
     );

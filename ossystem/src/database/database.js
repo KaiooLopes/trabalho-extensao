@@ -13,6 +13,7 @@ export async function initDatabase() {
   const database = await getDatabase();
 
   try {
+    // Tabela de usuários
     await database.execAsync(`
       CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,10 +22,24 @@ export async function initDatabase() {
         senha TEXT NOT NULL
       );
     `);
-    console.log("✔ Banco iniciado com sucesso");
+
+    // Tabela de ordens de serviço
+    await database.execAsync(`
+      CREATE TABLE IF NOT EXISTS ordens_servico (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        titulo TEXT NOT NULL,
+        descricao TEXT NOT NULL,
+        cliente TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'Pendente',
+        data_criacao TEXT NOT NULL,
+        data_conclusao TEXT
+      );
+    `);
+
+    // console.log("✔ Banco iniciado com sucesso");
     return true;
   } catch (error) {
-    console.log("Erro ao criar tabela:", error);
+    // console.log("Erro ao criar tabelas:", error);
     throw error;
   }
 }

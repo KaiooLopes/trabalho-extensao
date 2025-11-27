@@ -8,9 +8,12 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    Image,
 } from "react-native";
 import { loginUser } from "../database/userService";
 import { styles } from "../styles/LoginStyles";
+import { saveUser } from "../services/authService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
@@ -23,13 +26,31 @@ export default function LoginScreen({ navigation }) {
             return;
         }
 
+        // Validação de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Alert.alert("Erro", "Por favor, insira um email válido!");
+            return;
+        }
+
         setLoading(true);
         const result = await loginUser({ email, senha });
         setLoading(false);
-
         if (result.success) {
-            Alert.alert("Sucesso", `Bem-vindo(a) ${result.user.nome}!`);
-            // navigation.navigate("Home");
+            // Salvar usuário no AsyncStorage
+            const saveResult = await saveUser(result.user);
+            // console.log("Usuário salvo:", saveResult);
+            // console.log("🚀 Tentando navegar para Home...");
+
+            // Tenta diferentes formas de navegação
+            try {
+                navigation.replace("Home");
+                // console.log("✅ Navegação executada");
+            } catch (error) {
+                console.error("❌ Erro ao navegar:", error);
+                // Tenta navigate ao invés de replace
+                navigation.navigate("Home");
+            }
         } else {
             Alert.alert("Erro", "Usuário ou senha inválidos!");
         }
@@ -41,11 +62,15 @@ export default function LoginScreen({ navigation }) {
             style={styles.container}
         >
             <ScrollView contentContainerStyle={styles.scrollView}>
-                <View style={styles.content}>
+                <SafeAreaView style={styles.container}>
                     {/* Header */}
                     <View style={styles.header}>
                         <View style={styles.iconContainer}>
-                            <Text style={styles.icon}>🔐</Text>
+                            <Image
+                                source={require('../../assets/icon.png')}
+                                style={{ width: 180 }}
+                                resizeMode="contain"
+                            />
                         </View>
                         <Text style={styles.title}>Bem-vindo!</Text>
                         <Text style={styles.subtitle}>Faça login para continuar</Text>
@@ -75,6 +100,7 @@ export default function LoginScreen({ navigation }) {
                                 secureTextEntry
                                 value={senha}
                                 onChangeText={setSenha}
+                                autoCapitalize="none"
                             />
                         </View>
 
@@ -101,7 +127,7 @@ export default function LoginScreen({ navigation }) {
                             <Text style={styles.secondaryButtonText}>Criar Conta</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </SafeAreaView>
             </ScrollView>
         </KeyboardAvoidingView>
     );

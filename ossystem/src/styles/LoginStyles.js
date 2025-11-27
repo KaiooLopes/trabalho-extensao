@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#3B82F6',
+        minHeight: '100%',
     },
     scrollView: {
         flexGrow: 1,
@@ -19,18 +20,9 @@ export const styles = StyleSheet.create({
         marginBottom: 48,
     },
     iconContainer: {
-        width: 80,
-        height: 80,
-        backgroundColor: '#FFFFFF',
         borderRadius: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 8,
     },
     icon: {
         fontSize: 40,
@@ -54,6 +46,7 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 16,
         elevation: 10,
+        marginHorizontal: 20
     },
     inputGroup: {
         marginBottom: 16,
