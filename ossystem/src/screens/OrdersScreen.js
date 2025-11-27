@@ -22,6 +22,8 @@ export default function OrdersScreen({ navigation }) {
         titulo: "",
         descricao: "",
         cliente: "",
+        // 🚨 CAMPO VALOR ADICIONADO AQUI
+        valor: "", // Usaremos string para entrada, converteremos para numérico no DB
         status: "Pendente",
     });
 
@@ -42,6 +44,8 @@ export default function OrdersScreen({ navigation }) {
             titulo: "",
             descricao: "",
             cliente: "",
+            // 🚨 LIMPAR CAMPO VALOR
+            valor: "",
             status: "Pendente",
         });
         setModalVisible(true);
@@ -53,6 +57,8 @@ export default function OrdersScreen({ navigation }) {
             titulo: order.titulo,
             descricao: order.descricao,
             cliente: order.cliente,
+            // 🚨 PREENCHER CAMPO VALOR (Convertendo de numérico para string para exibir no TextInput)
+            valor: order.valor ? String(order.valor) : "",
             status: order.status,
         });
         setModalVisible(true);
@@ -60,15 +66,24 @@ export default function OrdersScreen({ navigation }) {
 
     async function handleSave() {
         if (!formData.titulo || !formData.descricao || !formData.cliente) {
-            Alert.alert("Atenção", "Preencha todos os campos!");
+            Alert.alert("Atenção", "Preencha todos os campos obrigatórios!");
             return;
         }
 
+        // 🚨 Prepara o valor: Converte a string de entrada para um número float. 
+        // Se a string estiver vazia, armazena NULL/0, dependendo da sua lógica de DB.
+        const valorNumerico = parseFloat(formData.valor.replace(',', '.')) || null;
+
+        const dataToSave = {
+            ...formData,
+            valor: valorNumerico,
+        };
+
         let result;
         if (editingOrder) {
-            result = await updateOrder(editingOrder.id, formData);
+            result = await updateOrder(editingOrder.id, dataToSave);
         } else {
-            result = await createOrder(formData);
+            result = await createOrder(dataToSave);
         }
 
         if (result.success) {
@@ -129,6 +144,15 @@ export default function OrdersScreen({ navigation }) {
         }
     }
 
+    // Função auxiliar para formatar o valor como moeda BRL
+    function formatCurrency(amount) {
+        if (amount === null || amount === undefined) return "N/A";
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(amount);
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             {/* Content */}
@@ -155,6 +179,12 @@ export default function OrdersScreen({ navigation }) {
                                         {order.status}
                                     </Text>
                                 </View>
+                            </View>
+
+                            {/* 🚨 EXIBIÇÃO DO VALOR NO CARD */}
+                            <View style={styles.orderInfo}>
+                                <Text style={styles.orderLabel}>Valor</Text>
+                                <Text style={styles.orderValue}>{formatCurrency(order.valor)}</Text>
                             </View>
 
                             <View style={styles.orderInfo}>
@@ -251,6 +281,21 @@ export default function OrdersScreen({ navigation }) {
                                     value={formData.descricao}
                                     onChangeText={(text) =>
                                         setFormData({ ...formData, descricao: text })
+                                    }
+                                />
+                            </View>
+
+                            {/* 🚨 NOVO CAMPO DE INPUT PARA VALOR */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Valor (R$)</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Ex: 150.50 (opcional)"
+                                    keyboardType="numeric" // Sugere teclado numérico
+                                    value={formData.valor}
+                                    onChangeText={(text) =>
+                                        // Permite apenas números e um ponto/vírgula
+                                        setFormData({ ...formData, valor: text.replace(/[^0-9,.]/g, '') })
                                     }
                                 />
                             </View>

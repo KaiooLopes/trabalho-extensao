@@ -15,14 +15,17 @@ export async function getAllOrders() {
 }
 
 // Criar nova ordem
-export async function createOrder({ titulo, descricao, cliente, status = 'Pendente' }) {
+// 🚨 CAMPO 'valor' ADICIONADO como parâmetro com valor padrão null
+export async function createOrder({ titulo, descricao, cliente, valor = null, status = 'Pendente' }) {
     const db = await getDatabase();
     const dataCriacao = new Date().toISOString();
 
     try {
         const result = await db.runAsync(
-            `INSERT INTO ordens_servico (titulo, descricao, cliente, status, data_criacao) VALUES (?, ?, ?, ?, ?)`,
-            [titulo, descricao, cliente, status, dataCriacao]
+            // 🚨 VALOR ADICIONADO na lista de colunas (entre 'cliente' e 'status')
+            `INSERT INTO ordens_servico (titulo, descricao, cliente, valor, status, data_criacao) VALUES (?, ?, ?, ?, ?, ?)`,
+            // 🚨 VALOR ADICIONADO na lista de parâmetros
+            [titulo, descricao, cliente, valor, status, dataCriacao]
         );
         return { success: true, id: result.lastInsertRowId };
     } catch (error) {
@@ -31,13 +34,16 @@ export async function createOrder({ titulo, descricao, cliente, status = 'Penden
 }
 
 // Atualizar ordem
-export async function updateOrder(id, { titulo, descricao, cliente, status }) {
+// 🚨 CAMPO 'valor' ADICIONADO como parâmetro
+export async function updateOrder(id, { titulo, descricao, cliente, valor, status }) {
     const db = await getDatabase();
 
     try {
         await db.runAsync(
-            `UPDATE ordens_servico SET titulo = ?, descricao = ?, cliente = ?, status = ? WHERE id = ?`,
-            [titulo, descricao, cliente, status, id]
+            // 🚨 VALOR ADICIONADO na query de UPDATE
+            `UPDATE ordens_servico SET titulo = ?, descricao = ?, cliente = ?, valor = ?, status = ? WHERE id = ?`,
+            // 🚨 VALOR ADICIONADO na lista de parâmetros
+            [titulo, descricao, cliente, valor, status, id]
         );
         return { success: true };
     } catch (error) {

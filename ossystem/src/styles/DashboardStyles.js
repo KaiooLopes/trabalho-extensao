@@ -248,4 +248,80 @@ export const styles = StyleSheet.create({
         width: 30,
         textAlign: 'right',
     },
+
+    headerWithButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+        // Garante que o Header original não está mais adicionando o padding do topo
+        // Se o seu componente Header usa paddingTop: 30, remova-o de lá ou ajuste este.
+    },
+
+    // Estilos do Botão de Exportar
+    exportButton: {
+        backgroundColor: '#3B82F6', // Cor primária (azul)
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        alignSelf: 'center',
+    },
+    exportButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    // Estilos do Modal
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '85%',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        marginBottom: 25,
+        color: '#1F2937',
+    },
+
+    // Estilos do Seletor de Data
+    datePickerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 30,
+        paddingHorizontal: 10,
+    },
+    datePickerButton: {
+        padding: 10,
+        backgroundColor: '#E5E7EB',
+        borderRadius: 8,
+    },
+    datePickerButtonText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#374151',
+    },
+    currentMonthText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#1F2937',
+        minWidth: 120,
+        textAlign: 'center',
+    }
 });

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { View, ActivityIndicator, StyleSheet, Image } from "react-native";
 import { isLoggedIn } from "../services/authService";
-import { initDatabase } from "../database/database";
+import { initDatabase, resetDatabase } from "../database/database";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SplashScreen({ navigation }) {
@@ -13,6 +13,7 @@ export default function SplashScreen({ navigation }) {
     try {
       // Inicializar banco de dados
       await initDatabase();
+      // await resetDatabase();
       // console.log("✅ Banco de dados inicializado");
 
       // Pequeno delay para exibir a splash

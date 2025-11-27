@@ -60,3 +60,26 @@ export async function getDashboardStats() {
         return { success: false, error };
     }
 }
+
+export async function getMonthlyOrders(month, year) {
+    const db = await getDatabase();
+
+    // Formata o padrão de busca (Ex: '2025-11%')
+    const searchPattern = `${year}-${String(month).padStart(2, '0')}%`;
+
+    try {
+        // Seleciona todas as colunas necessárias para o relatório
+        const orders = await db.getAllAsync(
+            `SELECT id, titulo, cliente, status, valor, data_criacao FROM ordens_servico WHERE data_criacao LIKE ? ORDER BY data_criacao ASC`,
+            [searchPattern]
+        );
+
+        return {
+            success: true,
+            orders: orders || [],
+        };
+    } catch (error) {
+        console.error(`Erro ao buscar ordens para ${month}/${year}:`, error);
+        return { success: false, error };
+    }
+}
